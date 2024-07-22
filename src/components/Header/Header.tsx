@@ -1,6 +1,7 @@
 import styles from './Header.module.scss'
 import { StatsCard } from '../StatsCard/StatsCard'
 
+
 export const Header: React.FC = () => {
     return(
         <header className={styles.header}>
