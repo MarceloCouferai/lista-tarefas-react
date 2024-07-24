@@ -1,7 +1,5 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import styles from './Tasks.module.scss'
-import { log } from 'console';
-import { render } from '@testing-library/react';
 
 
 interface Task {
@@ -23,14 +21,23 @@ export const Tasks: React.FC = () => {
             return;
         }
 
-        setTask([
+        const newTasks = [
             ...task,
             { id: new Date().getTime(), title: taskTitle, done: false }
-        ]);
+        ]
+
+        setTask(newTasks);
+        localStorage.setItem('Tasks', JSON.stringify(newTasks));
         setTaskTitle("");
 
     }
+    useEffect(() =>{
+        const tasksOnLocalStorage = localStorage.getItem('Tasks');
 
+        if(tasksOnLocalStorage){
+            setTask(JSON.parse(tasksOnLocalStorage));
+        }
+    }, [])
     return(
         <section className={styles.container}>
             <form onSubmit={handleSubmitAddTask}>
@@ -41,7 +48,6 @@ export const Tasks: React.FC = () => {
                 </div>
                 <button type="submit" >Adicionar Tarefa</button>
             </form>
-
             <ul>
                 {task.map(task => {
                     return(
